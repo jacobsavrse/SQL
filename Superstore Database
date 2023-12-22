@@ -16,4 +16,4 @@ and to order the results by Category
 select item_name as Item, category as Category, price as Price
 from superstore
 where category="Electronics" or category ="Appliances"
-order by category
+order by category;
