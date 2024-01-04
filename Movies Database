@@ -1,0 +1,7 @@
+select * 
+from movies;
+
+select *
+from movies
+where released >= 2021
+order by released desc;
