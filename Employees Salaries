@@ -1,0 +1,11 @@
+# Calculated how much is spent per year on the salaries for each department where the total spent on the salaries is at least $300,000. 
+select department, sum(salary) as total_spent
+from employees
+group by department
+having total_spent >= 300000;
+
+# Selected all the departments that pay an average of at least $70,000 per year.
+select department, avg(salary) as average_salary
+from employees
+group by department
+having average_salary >= 70000;
