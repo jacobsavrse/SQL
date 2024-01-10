@@ -12,7 +12,7 @@ from superstore
 where category="Kitchen Supplies";
 
 #Use a select statement to rename the rows for "Electronics and Appliances".
-and to order the results by Category
+and to order the results by Category.
 select item_name as Item, category as Category, price as Price
 from superstore
 where category="Electronics" or category ="Appliances"
