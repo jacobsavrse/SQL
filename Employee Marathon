@@ -23,7 +23,7 @@ select participant_name,
 completion_fraction*100 as percentage_completed
 from marathon;
 
-# selected participant names and their percentage completed, and rounded to one decimal point.
+#Selected participant names and their percentage completed, and rounded to one decimal point.
 select participant_name,
 round(completion_fraction*100, 1) as percentage_completed
 from marathon;
