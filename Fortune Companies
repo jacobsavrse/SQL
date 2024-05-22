@@ -57,19 +57,69 @@ VALUES
     ('Company KK', 'Healthcare', 150.2, 3400, 0, 16, 8, 5.3);
 
 
-#Selected all from the fortune companies table.
+/*1*/
+select * from fortune_companies;
 
-select *
+/*2*/
+select company_id, sum(employees) as Employee_Total,
+case when avg_employee_tenure between 4 and 4.9 then "4+ Years"
+when avg_employee_tenure between 5 and 5.9 then "5+ Years"
+when avg_employee_tenure between 6 and 6.9 then "6+ Years"
+else "7+ Years" end as Tenure_Average
+from fortune_companies
+group by Tenure_Average
+order by company_id;
+
+/*3*/
+select sum(employees) as Employees, industry as Industry
+from fortune_companies
+where industry = "Retail"
+group by industry
+having sum(employees) > 2000
+order by sum(employees);
+
+/*4*/
+select min(revenue) as Minimum_Revenue, employees as Employees,
+industry as Industry
+from fortune_companies
+group by revenue
+having min(revenue) >= 400;
+
+/*5*/
+select min(revenue) as Minimum_Revenue, employees as Employees,
+industry as Industry, company_name as Company
+from fortune_companies 
+group by revenue
+having min(revenue) >= 100 and industry = "Healthcare";
+
+/*6*/
+select avg(revenue) as Average_Revenue, employees as  Employees, industry as Industry, company_name as Company
+from fortune_companies 
+group by revenue
+having avg(revenue) >= 200 and industry = "Retail" or industry = "Finance";
+
+/* 7 Running a query with the "in" operator in leiu of the "or" condition. */ 
+select round(avg(revenue), 2) as Average_Revenue, employees as  Employees, industry as Industry, company_name as Company
+from fortune_companies 
+group by industry
+having avg(revenue) >= 200 and industry in("Healthcare", "Technology");
+
+/*8*/
+select count(paid_time_off_days) as Row_Count
+from fortune_companies
+where revenue >= 300;
+
+/*9*/
+select min(revenue) as Minimum_Revenue, max(revenue) as Maximum_Revenue
 from fortune_companies;
 
-#Counted all from revenue column and labled it Number_Per_Amount. Using the case statement, I created a column not in the table called Revenue_Amount and grouped it as such,
-using the group by statement.
-
-select count(*)as Number_Per_Amount,
-case when revenue >= 500 then "500+"
-when revenue >= 400 then "400+"
-when revenue >= 300 then "300+"
-when revenue >= 200 then "200+"
-else "Under 200" end as "Revenue_Amount"
+/*10*/
+select round(avg(avg_employee_tenure), 2) as Avg_Employee_Tenure
 from fortune_companies
-group by Revenue_Amount;
+where employees < 3000 and industry="Technology";
+
+/*11*/
+select round(avg(revenue), 2) as Average_Revenue, employees as  Employees, industry as Industry, company_name as Company
+from fortune_companies 
+group by industry
+order by Average_Revenue;
