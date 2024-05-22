@@ -60,7 +60,9 @@ VALUES
 /*1*/
 select * from fortune_companies;
 
-/*2*/
+/*2 Created Tenure_Average, which did not exist in the table and
+when the avg_employee_tenure was between a year range, with everyting else being placed in the Tenure_Average column.
+Also, used the sum function to give the total of employees. Then grouped the results by Tenure_Average and ordered by company_id.*/
 select company_id, sum(employees) as Employee_Total,
 case when avg_employee_tenure between 4 and 4.9 then "4+ Years"
 when avg_employee_tenure between 5 and 5.9 then "5+ Years"
@@ -70,7 +72,7 @@ from fortune_companies
 group by Tenure_Average
 order by company_id;
 
-/*3*/
+/*3 Returned the total employees where the industry is Retail, the total employees are greater than 2000, and ordering it by employees.*/
 select sum(employees) as Employees, industry as Industry
 from fortune_companies
 where industry = "Retail"
@@ -78,47 +80,50 @@ group by industry
 having sum(employees) > 2000
 order by sum(employees);
 
-/*4*/
+/*4 Returned the minimum revenue having a minimum revenue equal to or greater than 400, grouping the results by revenue.*/
 select min(revenue) as Minimum_Revenue, employees as Employees,
 industry as Industry
 from fortune_companies
 group by revenue
 having min(revenue) >= 400;
 
-/*5*/
+/*5 Returned the minimum revenue having a minimum revenue equal to or greater than 400, grouping the results by revenue,
+grouping them by revenue, and the industry being Healthcare.*/
 select min(revenue) as Minimum_Revenue, employees as Employees,
 industry as Industry, company_name as Company
 from fortune_companies 
 group by revenue
-having min(revenue) >= 100 and industry = "Healthcare";
+having min(revenue) >= 400 and industry = "Healthcare";
 
-/*6*/
+/*6 Returned the average revenue having an average equal to or greater than 200, having the industry be Retail or Finance, 
+and grouping the results by revenue.*/
 select avg(revenue) as Average_Revenue, employees as  Employees, industry as Industry, company_name as Company
 from fortune_companies 
 group by revenue
 having avg(revenue) >= 200 and industry = "Retail" or industry = "Finance";
 
-/* 7 Running a query with the "in" operator in leiu of the "or" condition. */ 
+/* 7 Rounded the average of revenue to two decimal points, having an average revenue equal to or greater than 200.
+Also using the "in" operator in leiu of the "or" condition for having the industry be Healthcare or Technology.*/ 
 select round(avg(revenue), 2) as Average_Revenue, employees as  Employees, industry as Industry, company_name as Company
 from fortune_companies 
 group by industry
 having avg(revenue) >= 200 and industry in("Healthcare", "Technology");
 
-/*8*/
+/*8 Counted the rows where revevue was equal to or greater than 300.*/
 select count(paid_time_off_days) as Row_Count
 from fortune_companies
 where revenue >= 300;
 
-/*9*/
+/*9 Returned the minimum and maximum revenue.*/
 select min(revenue) as Minimum_Revenue, max(revenue) as Maximum_Revenue
 from fortune_companies;
 
-/*10*/
+/*10 Rounded the average employee tenure to two decimal points where the number of employees are equal to or greater than 3000, and the industry is Technology.*/
 select round(avg(avg_employee_tenure), 2) as Avg_Employee_Tenure
 from fortune_companies
 where employees < 3000 and industry="Technology";
 
-/*11*/
+/*11 Rounded the average revenue to two decimal points, grouping the results by industry, and ordering them by Average_Revenue. */
 select round(avg(revenue), 2) as Average_Revenue, employees as  Employees, industry as Industry, company_name as Company
 from fortune_companies 
 group by industry
