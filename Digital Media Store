@@ -1,0 +1,160 @@
+/* Show Customers (their full names, customer ID, and country) who are not in the US.) */
+select Customerid
+FirstName, 
+LastName,
+Country
+from customers
+where Country <> "USA";
+
+/* Show only the Customers from Brazil. */
+select Customerid,
+FirstName, 
+LastName,
+Country
+from customers
+where Country = "Brazil";
+
+/* Find the Invoices of customers who are from Brazil. 
+The resulting table should show the customer's full name, 
+Invoice ID, Date of the invoice, and billing country. */
+select cust.FirstName,
+cust.LastName,
+inv.Invoiceid,
+inv.InvoiceDate,
+inv.BillingCountry
+from customers cust
+join invoices inv on cust.Customerid = inv.Customerid
+where inv.BillingCountry = 'Brazil';
+
+/* Show the Employees who are Sales Agents. */
+select FirstName,
+LastName,
+Title
+from employees
+where Title = 'Sales Support Agent'
+
+/* Find a unique/distinct list of billing countries from the Invoice table. */
+select distinct BillingCountry
+from invoices;
+
+/* Provide a query that shows the invoices associated with each sales agent. 
+The resulting table should include the Sales Agent's full name. */
+select emp.FirstName,
+emp.LastName,
+inv.Invoiceid,
+emp.Title
+from employees emp 
+join customers cust on cust.SupportRepId = emp.EmployeeId
+join invoices inv on inv.Customerid = cust.Customerid
+where emp.Title = 'Sales Support Agent';
+
+/* Show the Invoice Total, Customer name, Country, and Sales Agent name for all invoices and customers. */
+select cust.FirstName custFirstName,
+cust.LastName custLastName,
+cust.Country,
+emp.Title,
+emp.FirstName empFirstName,
+emp.LastName empLastName,
+sum(inv.Total) InvoiceTotal
+from customers cust
+join employees emp on cust.SupportRepId = emp.EmployeeId
+join invoices inv on inv.Customerid = cust.Customerid
+group by cust.FirstName,
+cust.LastName,
+cust.Country,
+emp.Title,
+emp.FirstName,
+emp.LastName;
+
+/* How many Invoices were there in 2009? */
+select count(InvoiceDate) NumberOfInvoices
+from invoices
+where InvoiceDate between '2009-01-01 00:00:00' and '2009-12-31 23:59:59';
+
+/* What are the total sales for 2009? */
+select round(sum(Total),2) TotalSales
+from invoices
+where InvoiceDate between '2009-01-01 00:00:00' and '2009-12-31 23:59:59';
+
+/* Write a query that includes the purchased track name with each invoice line ID. */
+select t.name PurchasedTrackName,
+invit.InvoiceLineId
+from tracks t
+join invoice_items invit on t.TrackId = invit.TrackId
+order by t.name;
+
+/* Write a query that includes the purchased track name AND artist name with each invoice line ID,
+with null values excluded */
+select t.composer, t.name PurchasedTrackName,
+invit.InvoiceLineId
+from tracks t 
+join invoice_items invit on t.TrackId = invit.TrackId
+where t.composer is not null
+order by t.composer;
+
+/* Provide a query that shows all the Tracks, and include the Album name, Media type, and Genre. */
+select t.Name TrackName,
+a.Title AlbumName,
+m.Name MediaType,
+g.Name Genre
+from tracks t
+join media_types m on t.MediaTypeId = m.MediaTypeId
+join genres g on t.GenreId = g.GenreId
+join albums a on t.AlbumId = a.AlbumId;
+
+/* Show the total sales made by each sales agent. */
+select emp.FirstName empFirstName,
+emp.LastName empLastName,
+round(sum(inv.Total), 2) TotalSales
+from employees emp
+join customers cust on emp.EmployeeId = cust.SupportRepId
+join invoices inv on cust.CustomerId = inv.CustomerId
+group by EmployeeId;
+
+/* Which sales agent made the most dollars in sales in 2009? */
+select emp.FirstName empFirstName,
+emp.LastName empLastName,
+round(sum(inv.Total), 2) "TotalSales2009"
+from employees emp
+join customers cust on emp.EmployeeId = cust.SupportRepId
+join invoices inv on cust.CustomerId = inv.CustomerId
+where InvoiceDate between '2009-01-01 00:00:00' and '2009-12-31 23:59:59'
+group by EmployeeId
+order by inv.total desc limit 1;
+
+/* Which customers in the USA were assisted by Steve Johnson */
+select cust.FirstName custFirstName,
+cust.LastName custLastName,
+cust.Country custCountry,
+emp.FirstName empFirstname,
+emp.LastName empLastName
+from customers cust
+join employees emp on cust.SupportRepId = emp.EmployeeId
+where cust.Country = "USA"
+and emp.FirstName = "Steve";
+
+/* List all Albums and their genre */
+select 
+alb.Title AlbumName,
+gen.Name Genre
+from albums alb
+join tracks t on t.AlbumId = alb.AlbumId
+join genres gen on t.GenreId = gen.GenreId
+group by alb.title, gen.name;
+
+/* List all track names and the playlist they are on, if they are on one */
+select 
+t.name TrackName,
+pl.name PlaylistName
+from tracks t
+join playlist_track pt on pt.TrackId = t.TrackId
+join playlists pl on pl.PlaylistId = pt.PlaylistId;
+
+/* List tracks and their artists who are on a playlist */
+select art.name Artist,
+t.name TrackName,
+pl.name PlaylistName
+from artists art
+join tracks t on t.composer = art.name
+join playlist_track pt on pt.trackid = t.trackid
+join playlists pl on pl.playlistid = pt.playlistid;
